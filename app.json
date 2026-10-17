@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "RideCircle",
+    "slug": "ridecircle",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "android": {
+      "package": "com.ridecircle.tesr",
+      "versionCode": 1
+    }
+  }
+}

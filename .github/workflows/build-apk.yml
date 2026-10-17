@@ -1,0 +1,36 @@
+name: Build RideCircle APK
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Install packages
+        run: npm install --no-audit --no-fund
+      - name: Generate Android project
+        run: npx expo prebuild --platform android --clean --non-interactive
+      - name: Build release APK
+        working-directory: android
+        run: ./gradlew assembleRelease --no-daemon
+      - name: Check APK
+        run: ls -lah android/app/build/outputs/apk/release/*.apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: RideCircle-Android-APK
+          path: android/app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
